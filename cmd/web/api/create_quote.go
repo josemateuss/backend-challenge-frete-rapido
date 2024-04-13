@@ -18,11 +18,11 @@ func (h handler) CreateQuote(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
 		log.Printf("error decoding input: %v", err)
-		response.WriteError(w, http.StatusBadRequest, "failed to decode input")
+		response.WriteError(w, http.StatusBadRequest, "failed to decode input, please, check the request body types")
 		return
 	}
 
-	err = h.application.Commands.CreateQuote.Validate(input)
+	err = h.application.Commands.CreateQuote.Validate(r.Context(), input)
 	if err != nil {
 		var validationError *useCasePackage.ValidationError
 		if errors.As(err, &validationError) {
@@ -38,6 +38,11 @@ func (h handler) CreateQuote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("error creating quote: %v", err)
 		response.WriteError(w, http.StatusInternalServerError, "failed to create quote")
+		return
+	}
+
+	if output.Quote == nil {
+		response.Write(w, http.StatusOK, map[string]any{"message": "no quotes found for this request"})
 		return
 	}
 

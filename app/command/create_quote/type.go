@@ -7,8 +7,9 @@ import (
 )
 
 type UseCase struct {
-	repository repository.CreateQuote
-	service    service.SimulateQuote
+	createQuoteRepository  repository.CreateQuote
+	validateZipcodeService service.ValidateZipCode
+	simulateQuoteService   service.SimulateQuote
 }
 
 type Input struct {

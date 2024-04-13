@@ -1,18 +1,29 @@
 package create_quote
 
 import (
-	"github.com/stretchr/testify/assert"
+	"context"
 	"testing"
+
+	"github.com/josemateuss/backend-challenge-frete-rapido/app/service"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestUseCase_Validate(t *testing.T) {
-	uc := UseCase{}
+	mockRepo := new(MockRepository)
+	validateZipcodeService := new(ValidateZipcodeMockService)
+	simulateQuoteService := new(SimulateQuoteMockService)
+	uc := UseCase{
+		createQuoteRepository:  mockRepo,
+		validateZipcodeService: validateZipcodeService,
+		simulateQuoteService:   simulateQuoteService,
+	}
 
 	t.Run("Test with valid input", func(t *testing.T) {
 		input := Input{
 			Recipient: Recipient{
 				Address: Address{
-					Zipcode: "12345",
+					Zipcode: "73340030",
 				},
 			},
 			Volumes: []Volume{
@@ -28,7 +39,11 @@ func TestUseCase_Validate(t *testing.T) {
 			},
 		}
 
-		err := uc.Validate(input)
+		validateZipcodeService.
+			On("Validate", mock.Anything, service.ValidateZipcodeInput{Zipcode: "73340030"}).
+			Return(&service.ValidateZipcodeOutput{}, nil)
+
+		err := uc.Validate(context.Background(), input)
 		assert.Nil(t, err)
 	})
 
@@ -52,7 +67,7 @@ func TestUseCase_Validate(t *testing.T) {
 			},
 		}
 
-		err := uc.Validate(input)
+		err := uc.Validate(context.Background(), input)
 		assert.NotNil(t, err)
 	})
 }

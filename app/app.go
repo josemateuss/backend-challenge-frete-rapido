@@ -8,7 +8,10 @@ import (
 )
 
 func NewApplication(repositories Repositories, services Services) (Application, error) {
-	createQuote, err := createQuoteCommand.New(repositories.CreateQuoteRepository, services.SimulateQuoteService)
+	createQuote, err := createQuoteCommand.New(
+		repositories.CreateQuoteRepository,
+		services.ValidateZipcode,
+		services.SimulateQuoteService)
 	if err != nil {
 		return Application{}, err
 	}
@@ -34,6 +37,7 @@ type Repositories struct {
 }
 
 type Services struct {
+	ValidateZipcode      service.ValidateZipCode
 	SimulateQuoteService service.SimulateQuote
 }
 

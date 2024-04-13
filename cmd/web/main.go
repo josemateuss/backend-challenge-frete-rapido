@@ -11,6 +11,7 @@ import (
 	handler "github.com/josemateuss/backend-challenge-frete-rapido/cmd/web/api"
 	mongodbRepository "github.com/josemateuss/backend-challenge-frete-rapido/infra/repository/mongodb"
 	freteRapidoService "github.com/josemateuss/backend-challenge-frete-rapido/infra/service/frete_rapido"
+	viaCepService "github.com/josemateuss/backend-challenge-frete-rapido/infra/service/via_cep"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -35,6 +36,7 @@ func main() {
 	}
 
 	services := app.Services{
+		ValidateZipcode:      viaCepService.NewService(),
 		SimulateQuoteService: freteRapidoService.NewService(),
 	}
 

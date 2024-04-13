@@ -19,7 +19,7 @@ func (h handler) ReadQuoteMetrics(w http.ResponseWriter, r *http.Request) {
 		lastQuotes, err := strconv.ParseUint(lastQuotesStr, 10, 32)
 		if err != nil {
 			log.Printf("error parsing query params: %v", err)
-			response.WriteError(w, http.StatusBadRequest, "failed to parse query params")
+			response.WriteError(w, http.StatusBadRequest, "last_quotes must be a valid number")
 			return
 		}
 

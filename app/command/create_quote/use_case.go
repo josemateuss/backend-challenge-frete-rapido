@@ -9,22 +9,30 @@ import (
 	"github.com/josemateuss/backend-challenge-frete-rapido/app/service"
 )
 
-func New(repository repository.CreateQuote, service service.SimulateQuote) (UseCase, error) {
-	if repository == nil {
+func New(
+	createQuoteRepository repository.CreateQuote,
+	validateZipcodeService service.ValidateZipCode,
+	simulateQuoteService service.SimulateQuote) (UseCase, error) {
+	if createQuoteRepository == nil {
 		return UseCase{}, fmt.Errorf("repository is required")
 	}
 
 	return UseCase{
-		repository: repository,
-		service:    service,
+		createQuoteRepository:  createQuoteRepository,
+		simulateQuoteService:   simulateQuoteService,
+		validateZipcodeService: validateZipcodeService,
 	}, nil
 }
 
 func (uc UseCase) Execute(ctx context.Context, input Input) (output Output, err error) {
-	simulateOutput, err := uc.service.Simulate(ctx, serviceSimulateQuoteInput(input))
+	simulateOutput, err := uc.simulateQuoteService.Simulate(ctx, serviceSimulateQuoteInput(input))
 	if err != nil {
 		log.Printf("error simulating quote: %v", err)
 		return output, fmt.Errorf("error simulating quote: %v", err)
+	}
+
+	if len(simulateOutput.Carrier) == 0 {
+		return output, nil
 	}
 
 	createInput := repository.CreateQuoteInput{}
@@ -37,7 +45,7 @@ func (uc UseCase) Execute(ctx context.Context, input Input) (output Output, err 
 		})
 	}
 
-	repositoryOutput, err := uc.repository.CreateQuote(ctx, createInput)
+	repositoryOutput, err := uc.createQuoteRepository.CreateQuote(ctx, createInput)
 	if err != nil {
 		log.Printf("error creating quote: %v", err)
 		return output, fmt.Errorf("error saving quote on database: %v", err)
