@@ -70,6 +70,10 @@ This command will generate a `coverage.out` file with the coverage report.
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
+## Issue
+
+Please, take a look in [#1](https://github.com/josemateuss/backend-challenge-frete-rapido/issues/1) issue.
+
 ## Author
 
 - **[José Mateus](https://github.com/josemateuss)**
