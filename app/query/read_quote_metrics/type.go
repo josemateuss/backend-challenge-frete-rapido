@@ -7,7 +7,7 @@ type UseCase struct {
 }
 
 type Input struct {
-	LastQuotes *uint `json:"last_quotes"`
+	LastQuotes uint `json:"last_quotes"`
 }
 
 type Output struct {

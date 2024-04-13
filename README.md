@@ -37,7 +37,7 @@ The application will be running at `localhost:3000`.
 
 Here are the endpoints required by the challenge:
 
-- POST: /quote:
+#### POST: /quote:
 
 ```bash
 curl --location 'localhost:3000/frete-rapido/api/v1/quote' \
@@ -45,12 +45,54 @@ curl --location 'localhost:3000/frete-rapido/api/v1/quote' \
 --data '{"recipient":{"address":{"zipcode":"73340030"}},"volumes":[{"category":7,"amount":1,"unitary_weight":5,"price":349,"sku":"abc-teste-123","height":0.2,"width":0.2,"length":0.2},{"category":7,"amount":2,"unitary_weight":4,"price":556,"sku":"abc-teste-527","height":0.4,"width":0.6,"length":0.15}]}'
 ```
 
-- GET: /metrics?last_quotes={{?}}:
+- Response example:
+
+```json
+{
+  "carrier": [
+    {
+      "name": "CORREIOS",
+      "service": "PAC",
+      "deadline": 6,
+      "price": 59.95
+    },
+    {
+      "name": "CORREIOS",
+      "service": "SEDEX",
+      "deadline": 2,
+      "price": 138.8
+    }
+  ]
+}
+```
+
+#### GET: /metrics?last_quotes={{?}}:
 
 `last_quotes` is optional
 
 ```bash
 curl --location 'localhost:3000/frete-rapido/api/v1/metrics?last_quotes=2'
+```
+
+- Response example:
+
+```json
+{
+    "results_per_carrier": {
+        "CORREIOS": 4,
+        "another_carrier": 1
+    },
+    "total_price_per_carrier": {
+        "CORREIOS": 238.7,
+        "another_carrier": 19.95
+    },
+    "average_price_per_carrier": {
+        "CORREIOS": 59.68,
+        "another_carrier": 19.95
+    },
+    "cheapest_freight": 19.95,
+    "most_expensive_freight": 138.8
+}
 ```
 
 ## Running tests

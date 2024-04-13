@@ -2,10 +2,10 @@ package read_quote_metrics
 
 import (
 	"context"
-	"github.com/josemateuss/backend-challenge-frete-rapido/domain"
 	"testing"
 
 	"github.com/josemateuss/backend-challenge-frete-rapido/app/repository"
+	"github.com/josemateuss/backend-challenge-frete-rapido/domain"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -28,7 +28,7 @@ func TestUseCase_Execute(t *testing.T) {
 
 	ctx := context.Background()
 	lastQuotes := uint(5)
-	input := Input{LastQuotes: &lastQuotes}
+	input := Input{LastQuotes: lastQuotes}
 	readQuotesOutput := &repository.ReadQuotesOutput{
 		Quotes: []domain.Quote{
 			{

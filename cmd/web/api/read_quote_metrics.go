@@ -23,10 +23,7 @@ func (h handler) ReadQuoteMetrics(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if lastQuotes != 0 {
-			u := uint(lastQuotes)
-			input.LastQuotes = &u
-		}
+		input.LastQuotes = uint(lastQuotes)
 	}
 
 	output, err := h.application.Queries.ReadQuoteMetrics.Execute(r.Context(), input)

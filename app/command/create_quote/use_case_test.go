@@ -67,7 +67,8 @@ func TestUseCase_Execute_Error(t *testing.T) {
 	ctx := context.Background()
 	input := Input{}
 
-	mockService.On("Simulate", ctx, serviceSimulateQuoteInput(input)).Return(&service.SimulateQuotesOutput{}, errors.New("error"))
+	mockService.On("Simulate", ctx, serviceSimulateQuoteInput(input)).
+		Return(&service.SimulateQuotesOutput{}, errors.New("error"))
 
 	_, err := uc.Execute(ctx, input)
 

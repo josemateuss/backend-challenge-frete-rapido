@@ -25,13 +25,12 @@ func NewReadQuotes(client *mongo.Client) readQuotes {
 
 func (repo readQuotes) ReadQuotes(ctx context.Context, input repository.ReadQuotesInput) (
 	output *repository.ReadQuotesOutput, err error) {
-
 	collection := repo.Client.Database(conf.DatabaseName).Collection("quotes")
 	var cursor *mongo.Cursor
-	if input.LastQuotes == nil {
+	if input.LastQuotes == 0 {
 		cursor, err = collection.Find(ctx, bson.M{}, options.Find())
 	} else {
-		lastQuotes := int64(*input.LastQuotes)
+		lastQuotes := int64(input.LastQuotes)
 		cursor, err = collection.Find(ctx, bson.M{}, options.Find().
 			SetLimit(lastQuotes).
 			SetSort(bson.D{{"created_at", -1}}))

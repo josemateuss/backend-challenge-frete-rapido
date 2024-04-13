@@ -7,7 +7,7 @@ import (
 )
 
 type ReadQuotesInput struct {
-	LastQuotes *uint
+	LastQuotes uint
 }
 
 type ReadQuotesOutput struct {
