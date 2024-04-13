@@ -1,0 +1,35 @@
+name: Build and Test
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Installing dependencies
+        run: go mod tidy
+
+      - name: Build
+        run: CGO_ENABLED=0 GOOS=linux go build -o main cmd/web/main.go
+
+      - name: Running tests
+        run: go test ./... -cover
